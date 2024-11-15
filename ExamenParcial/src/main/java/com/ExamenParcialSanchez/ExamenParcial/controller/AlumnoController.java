@@ -16,7 +16,7 @@ import com.ExamenParcialSanchez.ExamenParcial.model.AlumnoModel;
 import com.ExamenParcialSanchez.ExamenParcial.services.AlumnoService;
 
 @RestController
-@RequestMapping("alumno")
+@RequestMapping("Alumno")
 public class AlumnoController {
     
     @Autowired
