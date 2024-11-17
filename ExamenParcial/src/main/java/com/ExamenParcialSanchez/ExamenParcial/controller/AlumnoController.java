@@ -1,58 +1,69 @@
 package com.ExamenParcialSanchez.ExamenParcial.controller;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ExamenParcialSanchez.ExamenParcial.model.AlumnoModel;
 import com.ExamenParcialSanchez.ExamenParcial.services.AlumnoService;
 
-@RestController
-@RequestMapping("alumno")
+@Controller
+@RequestMapping("/alumno")
 public class AlumnoController {
     
     @Autowired
     AlumnoService alumnoService;
     
-    @GetMapping("/findAll")
-    public List<AlumnoModel> FindAll()
+    @GetMapping("/index")
+    public ModelAndView FindAll()
     {
-        List<AlumnoModel> lista = alumnoService.findAll();
+        ModelAndView lista = new ModelAndView("index");
+        lista.addObject("alumnos", alumnoService.findAll());
+        lista.addObject("alumno", new AlumnoModel ());
+        lista.addObject("action","/alumno/create");
         return lista;
     }
     
-    @PostMapping("/create")
-    public AlumnoModel create(@RequestBody AlumnoModel model)
-    {   
-        return alumnoService.add(model);
+     @PostMapping("/create")
+    public String create(@ModelAttribute("alumno") AlumnoModel model) {
+        alumnoService.add(model);
+        return "redirect:/alumno/index";
     }
 
-    // findById
-    @GetMapping("/findById/{id}")
-    public AlumnoModel findById(@PathVariable Integer id) {
-        return alumnoService.findById(id);
+    @GetMapping("/edit/{id}")
+    public ModelAndView edit(@PathVariable Integer id) {
+        ModelAndView editView = new ModelAndView("index");
+        AlumnoModel alumno = alumnoService.findById(id);
+        editView.addObject("alumno", alumno);
+        editView.addObject("alumnos", alumnoService.findAll());
+        editView.addObject("action", "/alumno/update/" + id); // Cambia el action del formulario
+        return editView;
     }
 
     // update
-    @PutMapping("/update/{id}")
-    public AlumnoModel update(@PathVariable Integer id, @RequestBody AlumnoModel model) {
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable Integer id, @ModelAttribute("alumno") AlumnoModel model) {
         model.setIdAlumno(id);
-        return alumnoService.update(model);
+        alumnoService.update(model);
+        return "redirect:/alumno/index";
     }
 
     // delete
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
         alumnoService.delete(id);
-        return "Alumno eliminado";
+        return "redirect:/alumno/index";
     }
+
+
 
 }
