@@ -1,7 +1,5 @@
 package com.ExamenParcialSanchez.ExamenParcial.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,12 +48,5 @@ public class AlumnoModel {
     public void setNota(double nota) {
         this.nota = nota;
     }
-
-
-  
-
-
-   
-
     
 }
