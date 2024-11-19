@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ExamenParcialSanchez.ExamenParcial.model.AlumnoModel;
 import com.ExamenParcialSanchez.ExamenParcial.services.AlumnoService;
 
+
 @Controller
 @RequestMapping("/alumno")
 public class AlumnoController {
