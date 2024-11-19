@@ -1,5 +1,7 @@
 package com.ExamenParcialSanchez.ExamenParcial.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,17 +19,16 @@ public class AlumnoModel {
     @Column(name = "id")
     public Integer idAlumno;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 100)
     public String nombre;
 
     @Column(name = "nota")
-    public Double nota;
+    public double nota;
 
-
-    // Getters and Setters
+     // Getters and Setters
+     
     public Integer getIdAlumno() {
         return idAlumno;
-
     }
 
     public void setIdAlumno(Integer idAlumno) {
@@ -42,12 +43,19 @@ public class AlumnoModel {
         this.nombre = nombre;
     }
 
-    public Double getNota() {
+    public double getNota() {
         return nota;
     }
-    public void setNota(Double nota) {
+
+    public void setNota(double nota) {
         this.nota = nota;
     }
+
+
+  
+
+
+   
 
     
 }

@@ -51,7 +51,7 @@
             </div>
             <div class="col-md-6">
                 <label for="nota" class="form-label">Nota:</label>
-                <input type="number" id="nota" name="nota" class="form-control" th:value="${alumno.nota}" required>
+                <input type="text" id="nota" name="nota" class="form-control" th:value="${alumno.nota}" required>
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-success" th:text="${alumno.idAlumno != null ? 'Actualizar' : 'Guardar'}">Guardar</button>
