@@ -1,96 +1,60 @@
 package com.ExamenParcialSanchez.ExamenParcial.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 import com.ExamenParcialSanchez.ExamenParcial.model.AlumnoModel;
 import com.ExamenParcialSanchez.ExamenParcial.services.AlumnoService;
+import com.ExamenParcialSanchez.router.routerApi;
 
 
-@Controller
-@RequestMapping("/alumno")
+@RestController
+@RequestMapping(routerApi.ALUMNO)
 public class AlumnoController {
 
     @Autowired
     AlumnoService alumnoService;
 
     // Método para listar alumnos
-    @GetMapping("/index")
-    public ModelAndView FindAll() {
-        ModelAndView lista = new ModelAndView("index");
-        try {
-            lista.addObject("alumnos", alumnoService.findAll());
-            lista.addObject("alumno", new AlumnoModel());
-            lista.addObject("action", "/alumno/create");
-        } catch (Exception e) {
-            lista.addObject("error", "Error al obtener la lista de alumnos: " + e.getMessage());
-        }
+    @GetMapping("/findAll")
+    public List<AlumnoModel> FindAll()
+    {
+        List<AlumnoModel> lista = alumnoService.findAll();
         return lista;
     }
+    
 
-    // Método para crear un alumno
     @PostMapping("/create")
-    public String create(@ModelAttribute("alumno") AlumnoModel model) {
-        try {
-            alumnoService.add(model);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error de validación al crear: " + e.getMessage());
-            return "redirect:/alumno/index?error=DatosInvalidos";
-        } catch (Exception e) {
-            System.err.println("Error inesperado al crear: " + e.getMessage());
-            return "redirect:/alumno/index?error=ErrorCreacion";
-        }
-        return "redirect:/alumno/index";
+    public AlumnoModel create(@RequestBody AlumnoModel model)
+    {   
+        return alumnoService.add(model);
     }
 
-    // Método para editar un alumno
-    @GetMapping("/edit/{id}")
-    public ModelAndView edit(@PathVariable Integer id) {
-        ModelAndView editView = new ModelAndView("index");
-        try {
-            AlumnoModel alumno = alumnoService.findById(id);
-            editView.addObject("alumno", alumno);
-            editView.addObject("alumnos", alumnoService.findAll());
-            editView.addObject("action", "/alumno/update/" + id); // Cambia el action del formulario
-        } catch (Exception e) {
-            editView.addObject("error", "Error al buscar el alumno: " + e.getMessage());
-        }
-        return editView;
+    // findById
+    @GetMapping("/findById/{id}")
+    public AlumnoModel findById(@PathVariable Integer id) {
+        return alumnoService.findById(id);
     }
 
-    // Método para actualizar un alumno
-    @PostMapping("/update/{id}")
-    public String update(@PathVariable Integer id, @ModelAttribute("alumno") AlumnoModel model) {
-        try {
-            model.setIdAlumno(id);
-            alumnoService.update(model);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error de validación al actualizar: " + e.getMessage());
-            return "redirect:/alumno/index?error=DatosInvalidos";
-        } catch (Exception e) {
-            System.err.println("Error inesperado al actualizar: " + e.getMessage());
-            return "redirect:/alumno/index?error=ErrorActualizacion";
-        }
-        return "redirect:/alumno/index";
+    // update
+    @PutMapping("/update/{id}")
+    public AlumnoModel update(@PathVariable Integer id, @RequestBody AlumnoModel model) {
+        model.setIdAlumno(id);
+        return alumnoService.update(model);
     }
 
-    // Método para eliminar un alumno
-    @GetMapping("/delete/{id}")
+    // delete
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
-        try {
-            alumnoService.delete(id);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error al eliminar: " + e.getMessage());
-            return "redirect:/alumno/index?error=AlumnoInexistente";
-        } catch (Exception e) {
-            System.err.println("Error inesperado al eliminar: " + e.getMessage());
-            return "redirect:/alumno/index?error=ErrorEliminacion";
-        }
-        return "redirect:/alumno/index";
+        alumnoService.delete(id);
+        return "Usuario eliminado con éxito";
     }
 }
